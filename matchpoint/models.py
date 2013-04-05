@@ -7,11 +7,25 @@ class Match(Document):
     keywords = fields.ListField(fields.StringField())
 
 
+    def to_dict(self):
+        return {
+            'domains': self.domains,
+            'keywords': self.keywords,
+        }
+
+
 class InterestVersion(Document):
     modified = fields.DateTimeField()
     duration = fields.IntField()
     threshold = fields.IntField()
     matches = fields.ListField(fields.DocumentField(Match))
+
+    def to_dict(self):
+        return {
+            'duration': self.duration,
+            'threshold': self.threshold,
+            'matches': [m.to_dict() for m in self.matches],
+        }
 
 
 class Interest(Document):

@@ -33,7 +33,7 @@ Start MongoDB::
 
 Start Flask::
 
-    python -m matchpoint
+    python app.py
 
 By default, the server will now be running on port 5000.
 
