@@ -32,8 +32,10 @@ def jsonify(f):
             data = ret
             status = 200
             headers = {}
+        content = json.dumps(data)
         headers['Content-Type'] = JSON
-        return json.dumps(data), status, headers
+        headers['Content-Length'] = len(content)
+        return content, status, headers
     return _wrapped
 
 
@@ -52,12 +54,13 @@ def get_namespace(name):
 
     fmt = lambda s: '/'.join((ns.name, s))
     interests = dict(((fmt(i.name), i.current.to_dict()) for i
-                      in ns.interests if i.modified >= since))
+                      in ns.interests if
+                      i.modified.replace(microsecond=0) > since))
 
     matched_interests = len(interests)
 
     if matched_interests == 0:
-        return {}, 304, {}
+        return {}, 304
 
     if matched_interests < total_interests:
         status = 206
@@ -65,7 +68,7 @@ def get_namespace(name):
         status = 200
 
     headers = {
-        'Last-Modified': ns.modified.isoformat() + 'Z',
+        'Last-Modified': ns.modified.strftime('%a, %d %b %Y %H:%M:%S GMT'),
     }
 
     return interests, status, headers
