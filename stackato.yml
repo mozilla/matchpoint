@@ -1,0 +1,11 @@
+name: matchpoint-dev
+framework: python
+runtime: python27
+requirements:
+  pypm:
+    - Flask
+    - Jinja2
+    - MongoAlchemy
+    - pymongo
+services:
+  ${name}-db: mongodb
