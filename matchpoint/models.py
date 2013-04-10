@@ -1,8 +1,25 @@
 from mongoalchemy import fields
 from mongoalchemy.document import Document
+from mongoalchemy.session import Session
 
 
-class Match(Document):
+# TODO: Move to matchpoint.models.base
+class DocumentBase(Document):
+    """Base class with useful methods."""
+
+    def __unicode__(self):
+        return u'<%s>' % self.__class__.__name__
+
+    def to_dict(self):
+        raise NotImplemented()
+
+    @classmethod
+    def query(cls):
+        s = Session.connect('default')  # XXX
+        return s.query(cls)
+
+
+class Match(DocumentBase):
     domains = fields.ListField(fields.StringField())
     keywords = fields.ListField(fields.StringField())
 
@@ -14,7 +31,7 @@ class Match(Document):
         }
 
 
-class InterestVersion(Document):
+class InterestVersion(DocumentBase):
     modified = fields.DateTimeField()
     duration = fields.IntField()
     threshold = fields.IntField()
@@ -28,14 +45,14 @@ class InterestVersion(Document):
         }
 
 
-class Interest(Document):
+class Interest(DocumentBase):
     name = fields.StringField()
     modified = fields.DateTimeField()
     current = fields.DocumentField(InterestVersion)
     versions = fields.ListField(fields.DocumentField(InterestVersion))
 
 
-class Namespace(Document):
+class Namespace(DocumentBase):
     name = fields.StringField()
     modified = fields.DateTimeField()
     interests = fields.ListField(fields.DocumentField(Interest))
