@@ -47,6 +47,9 @@ def get_namespace(name):
     if ns is None:
         return None, 404
 
+    if ns.removed:
+        return None, 410
+
     total_interests = len(ns.interests)
     since = request.if_modified_since
     if since is None:

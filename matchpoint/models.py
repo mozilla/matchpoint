@@ -13,6 +13,10 @@ class DocumentBase(Document):
     def to_dict(self):
         raise NotImplemented()
 
+    def save(self):
+        s = Session.connect('default')  # XXX
+        return s.insert(self)
+
     @classmethod
     def query(cls):
         s = Session.connect('default')  # XXX
@@ -56,6 +60,7 @@ class Namespace(DocumentBase):
     name = fields.StringField()
     modified = fields.DateTimeField()
     interests = fields.ListField(fields.DocumentField(Interest))
+    removed = fields.BooleanField()
 
     def __unicode__(self):
         return u'<Namespace: %s>' % self.name
