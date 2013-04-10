@@ -55,6 +55,11 @@ class Interest(DocumentBase):
     current = fields.DocumentField(InterestVersion)
     versions = fields.ListField(fields.DocumentField(InterestVersion))
 
+    def to_dict(self):
+        if self.current:
+            return self.current.to_dict()
+        return None
+
 
 class Namespace(DocumentBase):
     name = fields.StringField()

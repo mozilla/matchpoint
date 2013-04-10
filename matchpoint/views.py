@@ -56,7 +56,7 @@ def get_namespace(name):
         since = datetime.min
 
     fmt = lambda s: '/'.join((ns.name, s))
-    interests = dict(((fmt(i.name), i.current.to_dict()) for i
+    interests = dict(((fmt(i.name), i.to_dict()) for i
                       in ns.interests if
                       i.modified.replace(microsecond=0) > since))
 
