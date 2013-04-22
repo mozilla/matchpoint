@@ -9,3 +9,4 @@ requirements:
     - pymongo
 services:
   ${name}-db: mongodb
+ignores: ['data']
