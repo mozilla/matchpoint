@@ -1,6 +1,5 @@
 name: matchpoint-dev
 framework: python
-runtime: python27
 requirements:
   pypm:
     - Flask
