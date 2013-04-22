@@ -1,3 +1,5 @@
+import os
+
 from mongoalchemy import fields
 from mongoalchemy.document import Document
 from mongoalchemy.session import Session
@@ -19,7 +21,8 @@ class DocumentBase(Document):
 
     @classmethod
     def query(cls):
-        s = Session.connect('default')  # XXX
+        host = os.getenv('MONGODB_URL', 'localhost')
+        s = Session.connect('default', host)  # XXX
         return s.query(cls)
 
 
@@ -65,7 +68,7 @@ class Namespace(DocumentBase):
     name = fields.StringField()
     modified = fields.DateTimeField()
     interests = fields.ListField(fields.DocumentField(Interest))
-    removed = fields.BooleanField()
+    removed = fields.BoolField()
 
     def __unicode__(self):
         return u'<Namespace: %s>' % self.name
