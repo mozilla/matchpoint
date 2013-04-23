@@ -16,7 +16,8 @@ class DocumentBase(Document):
         raise NotImplemented()
 
     def save(self):
-        s = Session.connect('default')  # XXX
+        host = os.getenv('MONGODB_URL', 'localhost')
+        s = Session.connect('default', host)  # XXX
         return s.insert(self)
 
     @classmethod
@@ -68,7 +69,7 @@ class Namespace(DocumentBase):
     name = fields.StringField()
     modified = fields.DateTimeField()
     interests = fields.ListField(fields.DocumentField(Interest))
-    removed = fields.BoolField()
+    removed = fields.BoolField(default=False)
 
     def __unicode__(self):
         return u'<Namespace: %s>' % self.name
