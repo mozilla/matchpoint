@@ -1,3 +1,4 @@
+import json
 import os
 
 from mongoalchemy import fields
@@ -12,18 +13,26 @@ class DocumentBase(Document):
     def __unicode__(self):
         return u'<%s>' % self.__class__.__name__
 
+#    def get_host(self):
+#        services = json.loads(os.getenv(
+
     def to_dict(self):
         raise NotImplemented()
 
     def save(self):
         host = os.getenv('MONGODB_URL', 'localhost')
-        s = Session.connect('default', host)  # XXX
+        s = Session.connect('db', host=host)  # XXX
         return s.insert(self)
+
+    def delete(self):
+        host = os.getenv('MONGODB_URL', 'localhost')
+        s = Session.connect('db', host=host)
+        return s.remove(self)
 
     @classmethod
     def query(cls):
         host = os.getenv('MONGODB_URL', 'localhost')
-        s = Session.connect('default', host)  # XXX
+        s = Session.connect('db', host=host)  # XXX
         return s.query(cls)
 
 
